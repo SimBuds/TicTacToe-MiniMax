@@ -14,7 +14,7 @@ public class Game extends JFrame implements ActionListener{
     boolean gameOver;
     Scanner scanner;
     private JButton[][] buttons;
-    private static final String FRAME_TITLE = "Andrew's Tic Tac Toe";
+    private static final String FRAME_TITLE = "Bar Down Tic Tac Toe";
 
     public Game() {
         board = new Board();
@@ -22,13 +22,11 @@ public class Game extends JFrame implements ActionListener{
         gameOver = false;
         buttons = new JButton[Board.AREA][Board.AREA];
         initializePlayers();
-        setVisible(true);
-        initializeGUI();
     }
 
     private void initializeGUI() {
         setTitle(FRAME_TITLE);
-        setSize(300, 300);
+        setSize(350, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(Board.AREA, Board.AREA));
 
@@ -52,11 +50,11 @@ public class Game extends JFrame implements ActionListener{
                     if (moveMade) {
                         buttons[row][col].setText(Character.toString(currentPlayer.getSymbol()));
                         buttons[row][col].setEnabled(false);
-                        checkGameState();
                     }
                 }
             }
         }
+        checkGameState();
     }
 
     private void checkGameState() {
@@ -99,49 +97,36 @@ public class Game extends JFrame implements ActionListener{
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input! Please enter 1 for Human or 2 for AI.");
-                scanner.nextLine(); // Clear the buffer
+                scanner.nextLine();
             }
         }
     }
 
     public void initializePlayers() {
-        // Use JOptionPane to get input for player choices
+        initializeGUI();
         Object[] options = {"Human", "AI"};
         int choice = JOptionPane.showOptionDialog(this, "Choose your opponent:", "Opponent Selection",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-    
         if (choice == 0) {
-            // Human opponent selected
             player1 = new Player('X', false, false);
             player2 = new Player('O', false, false);
         } else if (choice == 1) {
             if (JOptionPane.showConfirmDialog(this, "You really want easy mode?", "AI Selection Menu",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                // Easy AI opponent selected
                 player1 = new Player('X', false, false);
                 player2 = new Player('O', true, false);
             } else if (JOptionPane.showConfirmDialog(this, "Do you want to play against a hard AI?", "AI Selection Menu",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                // Hard AI opponent selected
                 player1 = new Player('X', false, false);
                 player2 = new Player('O', true, true);
             }
         } else {
-            // Invalid choice (shouldn't happen)
             System.exit(0);
         }
-    
-        // Randomly select who goes first
-        if (Math.random() < 0.5) {
-            currentPlayer = player1;
-        } else {
-            currentPlayer = player2;
-        }
-    
+        currentPlayer = player1;
         if (currentPlayer.isAI()) {
             currentPlayer.makeMove(board);
             updateBoard();
         }
     }
-    
 }

@@ -66,13 +66,20 @@ public class Game extends JFrame implements ActionListener{
             System.exit(0);
         } else {
             currentPlayer = (currentPlayer == player1) ? player2 : player1;
-            if (currentPlayer.isAI()) {
-                currentPlayer.makeMove(board);
+            
+            if (currentPlayer.isAI() || currentPlayer.isSmartAI()) {
+                int[] move;
+                if (currentPlayer.isSmartAI()) {
+                    move = currentPlayer.makeSmartAIMove(board);
+                } else {
+                    move = currentPlayer.makeAIMove(board);
+                }
+                board.makeMove(move[0], move[1], currentPlayer.getSymbol());
                 updateBoard();
                 checkGameState();
             }
         }
-    }
+    }      
 
     private void updateBoard() {
         for (int row = 0; row < Board.AREA; row++) {
@@ -123,10 +130,21 @@ public class Game extends JFrame implements ActionListener{
         } else {
             System.exit(0);
         }
-        currentPlayer = player1;
-        if (currentPlayer.isAI()) {
-            currentPlayer.makeMove(board);
+        
+        currentPlayer = (currentPlayer == player1) ? player2 : player1;
+        if (currentPlayer.isAI() || currentPlayer.isSmartAI()) {
+            int[] move;
+            if (currentPlayer.isSmartAI()) {
+                move = currentPlayer.makeSmartAIMove(board);
+            } else {
+                move = currentPlayer.makeAIMove(board);
+            }
+            board.makeMove(move[0], move[1], currentPlayer.getSymbol());
+            updateBoard();
+        } else {
+            currentPlayer = player1;
+            currentPlayer.makeHumanMove(board);
             updateBoard();
         }
-    }
+    }    
 }

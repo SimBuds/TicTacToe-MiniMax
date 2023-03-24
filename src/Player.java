@@ -63,15 +63,19 @@ public class Player {
         }  
     }
 
-    private void makeAIMove(Board board) {
+    public int[] makeAIMove(Board board) {
         Random random = new Random();
         int row, col;
         boolean validMove = false;
         while (!validMove) {
             row = random.nextInt(3);
             col = random.nextInt(3);
-            validMove = board.makeMove(row, col, symbol);
+            if (board.isValidMove(row, col)) {
+                validMove = true;
+                return new int[]{row, col};
+            }
         }
+        return new int[]{-1, -1};
     }
 
     public int[] makeSmartAIMove(Board board) {
@@ -157,5 +161,10 @@ public class Player {
 
     public boolean isAI() {
         return isAI;
-    }    
+    }
+
+    public boolean isSmartAI() {
+        return smartAI;
+    }
+
 }

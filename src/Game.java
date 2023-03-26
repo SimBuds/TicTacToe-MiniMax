@@ -13,7 +13,6 @@ public class Game extends JFrame implements ActionListener{
     Player currentPlayer;
     boolean gameOver;
     Scanner scanner;
-    private boolean aiTurn = false;
     private JButton[][] buttons;
     private static final String FRAME_TITLE = "Bar Down Tic Tac Toe";
 
@@ -78,13 +77,13 @@ public class Game extends JFrame implements ActionListener{
         } else {
             currentPlayer = (currentPlayer == player1) ? player2 : player1;
             if (currentPlayer.isAI()) {
-                aiTurn = true;
-                currentPlayer.makeMove(board);
+                int[] move = currentPlayer.getMove(board);
+                board.makeMove(move[0], move[1], currentPlayer.getSymbol());
                 updateBoard();
                 checkGameState();
             }
         }
-    }
+    }    
 
     private void resetGame() {
         board = new Board();
@@ -132,10 +131,20 @@ public class Game extends JFrame implements ActionListener{
         } else {
             System.exit(0);
         }
-        currentPlayer = player1;
+
+        Object[] options2 = {"First", "Second"};
+        int choice2 = JOptionPane.showOptionDialog(this, "Do you want to go first?", "First or Second?",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options2, options2[0]);
+        if (choice2 == 0) {
+            currentPlayer = player1;
+        } else if (choice2 == 1) {
+            currentPlayer = player2;
+        } else {
+            System.exit(0);
+        }
         if (currentPlayer.isAI()) {
-            aiTurn = true;
-            currentPlayer.makeMove(board);
+            int[] move = currentPlayer.getMove(board);
+            board.makeMove(move[0], move[1], currentPlayer.getSymbol());
             updateBoard();
             checkGameState();
         }

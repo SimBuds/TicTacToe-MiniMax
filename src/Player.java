@@ -25,7 +25,17 @@ public class Player {
         }
     }
 
-    
+    public int[] getMove(Board board) {
+        if (isAI) {
+            if (smartAI) {
+                return makeSmartAIMove(board);
+            } else {
+                return makeAIMove(board);
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
     public int[] makeAIMove(Board board) {
         Random random = new Random();
         int row, col;

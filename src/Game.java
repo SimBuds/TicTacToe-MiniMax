@@ -13,6 +13,7 @@ public class Game extends JFrame implements ActionListener{
     Player currentPlayer;
     boolean gameOver;
     Scanner scanner;
+    private boolean aiTurn = false;
     private JButton[][] buttons;
     private static final String FRAME_TITLE = "Bar Down Tic Tac Toe";
 
@@ -59,27 +60,43 @@ public class Game extends JFrame implements ActionListener{
 
     private void checkGameState() {
         if (board.checkWinner(currentPlayer.getSymbol())) {
-            JOptionPane.showMessageDialog(this, "Player " + currentPlayer.getSymbol() + " wins!");
-            System.exit(0);
+            JOptionPane.showMessageDialog(this, "Player " + currentPlayer.getSymbol() + " wins!", "Game Over",
+                    JOptionPane.INFORMATION_MESSAGE);
+            gameOver = true;
         } else if (board.checkDraw()) {
-            JOptionPane.showMessageDialog(this, "It's a draw!");
-            System.exit(0);
+            JOptionPane.showMessageDialog(this, "It's a tie!", "Game Over",
+                    JOptionPane.INFORMATION_MESSAGE);
+            gameOver = true;
+        }
+        if (gameOver) {
+            if (JOptionPane.showConfirmDialog(this, "Do you want to play again?", "Play Again?",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                resetGame();
+            } else {
+                System.exit(0);
+            }
         } else {
             currentPlayer = (currentPlayer == player1) ? player2 : player1;
-            
-            if (currentPlayer.isAI() || currentPlayer.isSmartAI()) {
-                int[] move;
-                if (currentPlayer.isSmartAI()) {
-                    move = currentPlayer.makeSmartAIMove(board);
-                } else {
-                    move = currentPlayer.makeAIMove(board);
-                }
-                board.makeMove(move[0], move[1], currentPlayer.getSymbol());
+            if (currentPlayer.isAI()) {
+                aiTurn = true;
+                currentPlayer.makeMove(board);
                 updateBoard();
                 checkGameState();
             }
         }
-    }      
+    }
+
+    private void resetGame() {
+        board = new Board();
+        gameOver = false;
+        currentPlayer = player1;
+        for (int row = 0; row < Board.AREA; row++) {
+            for (int col = 0; col < Board.AREA; col++) {
+                buttons[row][col].setText("");
+                buttons[row][col].setEnabled(true);
+            }
+        }
+    }
 
     private void updateBoard() {
         for (int row = 0; row < Board.AREA; row++) {
@@ -88,23 +105,6 @@ public class Game extends JFrame implements ActionListener{
                     buttons[row][col].setText(Character.toString(board.getBoard()[row][col]));
                     buttons[row][col].setEnabled(false);
                 }
-            }
-        }
-    }
-
-    public int getValidInput(Scanner scanner) {
-        int input;
-        while (true) {
-            try {
-                input = scanner.nextInt();
-                if (input >= 1 && input <= 2) {
-                    return input;
-                } else {
-                    System.out.println("Invalid input! Please enter 1 for Human or 2 for AI.");
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid input! Please enter 1 for Human or 2 for AI.");
-                scanner.nextLine();
             }
         }
     }
@@ -126,25 +126,18 @@ public class Game extends JFrame implements ActionListener{
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 player1 = new Player('X', false, false);
                 player2 = new Player('O', true, true);
+            } else {
+                System.exit(0);
             }
         } else {
             System.exit(0);
         }
-        
-        currentPlayer = (currentPlayer == player1) ? player2 : player1;
-        if (currentPlayer.isAI() || currentPlayer.isSmartAI()) {
-            int[] move;
-            if (currentPlayer.isSmartAI()) {
-                move = currentPlayer.makeSmartAIMove(board);
-            } else {
-                move = currentPlayer.makeAIMove(board);
-            }
-            board.makeMove(move[0], move[1], currentPlayer.getSymbol());
+        currentPlayer = player1;
+        if (currentPlayer.isAI()) {
+            aiTurn = true;
+            currentPlayer.makeMove(board);
             updateBoard();
-        } else {
-            currentPlayer = player1;
-            currentPlayer.makeHumanMove(board);
-            updateBoard();
+            checkGameState();
         }
     }    
 }

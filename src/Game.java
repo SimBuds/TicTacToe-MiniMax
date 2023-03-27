@@ -14,7 +14,7 @@ public class Game extends JFrame implements ActionListener{
     boolean gameOver;
     Scanner scanner;
     private JButton[][] buttons;
-    private static final String FRAME_TITLE = "Bar Down Tic Tac Toe";
+    private static final String FRAME_TITLE = "Matt Sucks At TicTacToe";
 
     public Game() {
         board = new Board();

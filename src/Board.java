@@ -25,21 +25,6 @@ public class Board {
         }
     }
 
-    public void displayBoard() {
-        for (int row = 0; row < AREA; row++) {
-            for (int col = 0; col < AREA; col++) {
-                System.out.print(board[row][col]);
-                if (col < AREA - 1) {
-                    System.out.print(" | ");
-                }
-            }
-            System.out.println();
-            if (row < AREA - 1) {
-                System.out.println("---------");
-            }
-        }
-    }
-
     public boolean makeMove(int row, int col, char symbol) {
         if (isValidMove(row, col)) {
             board[row][col] = symbol;

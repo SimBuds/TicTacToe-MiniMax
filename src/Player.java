@@ -4,6 +4,7 @@ public class Player {
     private char symbol;
     private boolean isAI;
     private boolean smartAI;
+    private int[] move;
 
     public Player(char symbol, boolean isAI, boolean smartAI) {
         this.symbol = symbol;
@@ -14,14 +15,10 @@ public class Player {
         return symbol;
     }
 
-    public void makeMove(Board board) {
-        if (isAI) {
-            if (smartAI) {
-                int[] bestMove = makeSmartAIMove(board);
-                board.makeMove(bestMove[0], bestMove[1], getSymbol());
-            } else {
-                makeAIMove(board);
-            }
+    public void placeMove(Board board) {
+        move = getMove(board);
+        if (move[0] != -1 && move[1] != -1) {
+            board.makeMove(move[0], move[1], symbol);
         }
     }
 
@@ -52,26 +49,27 @@ public class Player {
     }
 
     public int[] makeSmartAIMove(Board board) {
-        int bestScore = Integer.MIN_VALUE;
-        int[] bestMove = new int[2];
+        int[] bestMove = new int[]{-1, -1};
+        int bestValue = Integer.MIN_VALUE;
+        char opponentSymbol = getOpponentSymbol(symbol);
+    
         for (int row = 0; row < Board.AREA; row++) {
             for (int col = 0; col < Board.AREA; col++) {
                 if (board.isValidMove(row, col)) {
-                    board.makeMove(row, col, symbol);
-                    int score = minimax(board, 0, false);
-                    board.makeMove(row, col, ' ');
-                    if (score > bestScore) {
-                        bestScore = score;
-                        bestMove[0] = row;
-                        bestMove[1] = col;
+                    Board tempBoard = new Board(board.getBoard());
+                    tempBoard.makeMove(row, col, symbol);
+                    int moveValue = minimax(tempBoard, 0, false, Integer.MIN_VALUE, Integer.MAX_VALUE, opponentSymbol);
+                    if (moveValue > bestValue) {
+                        bestValue = moveValue;
+                        bestMove = new int[]{row, col};
                     }
                 }
             }
         }
         return bestMove;
     }
-
-    private int minimax(Board board, int depth, boolean isMaximizing) {
+    
+    public int minimax(Board board, int depth, boolean isMaximizing, int alpha, int beta, char currentSymbol) {
         if (board.checkWinner(symbol)) {
             return 10 - depth;
         } else if (board.checkWinner(getOpponentSymbol(symbol))) {
@@ -79,36 +77,46 @@ public class Player {
         } else if (board.checkDraw()) {
             return 0;
         }
-
+    
+        char opponentSymbol = getOpponentSymbol(currentSymbol);
+    
         if (isMaximizing) {
-            int bestScore = Integer.MIN_VALUE;
+            int maxEval = Integer.MIN_VALUE;
             for (int row = 0; row < Board.AREA; row++) {
                 for (int col = 0; col < Board.AREA; col++) {
                     if (board.isValidMove(row, col)) {
-                        board.makeMove(row, col, symbol);
-                        int score = minimax(board, depth + 1, false);
-                        board.makeMove(row, col, ' ');
-                        bestScore = Math.max(score, bestScore);
+                        Board tempBoard = new Board(board.getBoard());
+                        tempBoard.makeMove(row, col, currentSymbol);
+                        int eval = minimax(tempBoard, depth + 1, false, alpha, beta, opponentSymbol);
+                        maxEval = Math.max(maxEval, eval);
+                        alpha = Math.max(alpha, eval);
+                        if (beta <= alpha) {
+                            break;
+                        }
                     }
                 }
             }
-            return bestScore;
+            return maxEval;
         } else {
-            int bestScore = Integer.MAX_VALUE;
+            int minEval = Integer.MAX_VALUE;
             for (int row = 0; row < Board.AREA; row++) {
                 for (int col = 0; col < Board.AREA; col++) {
                     if (board.isValidMove(row, col)) {
-                        board.makeMove(row, col, getOpponentSymbol(symbol));
-                        int score = minimax(board, depth + 1, true);
-                        board.makeMove(row, col, ' ');
-                        bestScore = Math.min(score, bestScore);
+                        Board tempBoard = new Board(board.getBoard());
+                        tempBoard.makeMove(row, col, currentSymbol);
+                        int eval = minimax(tempBoard, depth + 1, true, alpha, beta, opponentSymbol);
+                        minEval = Math.min(minEval, eval);
+                        beta = Math.min(beta, eval);
+                        if (beta <= alpha) {
+                            break;
+                        }
                     }
                 }
             }
-            return bestScore;
+            return minEval;
         }
     }
-
+    
     private char getOpponentSymbol(char symbol) {
         return (symbol == 'X') ? 'O' : 'X';
     }

@@ -8,6 +8,15 @@ public class Board {
         startingBoard();
     }
 
+    public Board(char[][] inputBoard) {
+        board = new char[AREA][AREA];
+        for (int row = 0; row < AREA; row++) {
+            for (int col = 0; col < AREA; col++) {
+                board[row][col] = inputBoard[row][col];
+            }
+        }
+    }
+
     public void startingBoard() {
         for (int row = 0; row < AREA; row++) {
             for (int col = 0; col < AREA; col++) {

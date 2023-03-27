@@ -147,6 +147,9 @@ public class Game extends JFrame implements ActionListener{
             board.makeMove(move[0], move[1], currentPlayer.getSymbol());
             updateBoard();
             checkGameState();
+        } else {
+            JOptionPane.showMessageDialog(this, "Player " + currentPlayer.getSymbol() + " goes first!", "First Move",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }    
 }

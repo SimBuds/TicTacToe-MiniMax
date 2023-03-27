@@ -5,7 +5,6 @@ public class Player {
     private char symbol;
     private boolean isAI;
     private boolean smartAI;
-    private int[] move;
 
     public Player(char symbol, boolean isAI, boolean smartAI) {
         this.symbol = symbol;
@@ -14,13 +13,6 @@ public class Player {
     }
     public char getSymbol() {
         return symbol;
-    }
-
-    public void placeMove(Board board) {
-        move = getMove(board);
-        if (move[0] != -1 && move[1] != -1) {
-            board.makeMove(move[0], move[1], symbol);
-        }
     }
 
     public int[] getMove(Board board) {

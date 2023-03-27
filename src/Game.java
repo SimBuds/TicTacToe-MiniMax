@@ -1,17 +1,19 @@
+// Casey Hsu - 101376814
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-// Casey Hsu - 101376814
-public class Game extends JFrame implements ActionListener{
+
+public class Game extends JFrame implements ActionListener {
 
     Board board;
     Player player1;
     Player player2;
     Player currentPlayer;
     boolean gameOver;
+    
     private JButton[][] buttons;
-    private static final String FRAME_TITLE = "CFML TicTacToe";
+    private static final String FRAME_TITLE = "CFML - TicTacToe";
     private static final Color BUTTON_COLOR = new Color(50, 50, 50);
     private static final Color BUTTON_TEXT_COLOR = new Color(150, 0, 50);
     private static final Color BOARD_BACKGROUND_COLOR = new Color(255, 255, 255);

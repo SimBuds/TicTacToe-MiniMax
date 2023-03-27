@@ -1,5 +1,6 @@
-import java.util.Random;
 // Casey Hsu - 101376814
+import java.util.Random;
+
 public class Player {
 
     private char symbol;

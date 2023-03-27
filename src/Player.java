@@ -1,6 +1,7 @@
 import java.util.Random;
 
 public class Player {
+    
     private char symbol;
     private boolean isAI;
     private boolean smartAI;

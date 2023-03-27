@@ -21,15 +21,20 @@ public class Game extends JFrame implements ActionListener{
         board = new Board();
         gameOver = false;
         buttons = new JButton[Board.AREA][Board.AREA];
+    }
+
+    public void launch() {
+        initializeGUI();
         initializePlayers();
     }
 
     private void initializeGUI() {
         setTitle(FRAME_TITLE);
-        setSize(350, 350);
+        setSize(400, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(Board.AREA, Board.AREA));
         getContentPane().setBackground(BOARD_BACKGROUND_COLOR);
+        setLocationRelativeTo(null);
     
         for (int row = 0; row < Board.AREA; row++) {
             for (int col = 0; col < Board.AREA; col++) {
@@ -92,13 +97,13 @@ public class Game extends JFrame implements ActionListener{
     private void resetGame() {
         board = new Board();
         gameOver = false;
-        currentPlayer = player1;
         for (int row = 0; row < Board.AREA; row++) {
             for (int col = 0; col < Board.AREA; col++) {
                 buttons[row][col].setText("");
                 buttons[row][col].setEnabled(true);
             }
         }
+        initializePlayers();
     }
 
     private void updateBoard() {
@@ -113,7 +118,6 @@ public class Game extends JFrame implements ActionListener{
     }
 
     public void initializePlayers() {
-        initializeGUI();
         Object[] options = {"Human", "AI"};
         int choice = JOptionPane.showOptionDialog(this, "Choose your opponent:", "Opponent Selection",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);

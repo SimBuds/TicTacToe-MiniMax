@@ -11,7 +11,11 @@ public class Game extends JFrame implements ActionListener{
     Player currentPlayer;
     boolean gameOver;
     private JButton[][] buttons;
-    private static final String FRAME_TITLE = "Matt Sucks At TicTacToe";
+    private static final String FRAME_TITLE = "CFML TicTacToe";
+    private static final Color BUTTON_COLOR = new Color(50, 50, 50);
+    private static final Color BUTTON_TEXT_COLOR = new Color(150, 0, 50);
+    private static final Color BOARD_BACKGROUND_COLOR = new Color(255, 255, 255);
+    private static final Font BUTTON_FONT = new Font("Calibri", Font.BOLD, 40);
 
     public Game() {
         board = new Board();
@@ -25,15 +29,19 @@ public class Game extends JFrame implements ActionListener{
         setSize(350, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(Board.AREA, Board.AREA));
-
+        getContentPane().setBackground(BOARD_BACKGROUND_COLOR);
+    
         for (int row = 0; row < Board.AREA; row++) {
             for (int col = 0; col < Board.AREA; col++) {
                 buttons[row][col] = new JButton("");
                 buttons[row][col].addActionListener(this);
+                buttons[row][col].setFont(BUTTON_FONT);
+                buttons[row][col].setBackground(BUTTON_COLOR);
+                buttons[row][col].setForeground(BUTTON_TEXT_COLOR);
+                buttons[row][col].setFocusPainted(false);
                 add(buttons[row][col]);
             }
         }
-
         setVisible(true);
     }
 

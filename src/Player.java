@@ -1,7 +1,7 @@
 import java.util.Random;
-
+// Casey Hsu - 101376814
 public class Player {
-    
+
     private char symbol;
     private boolean isAI;
     private boolean smartAI;

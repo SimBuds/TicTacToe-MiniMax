@@ -1,10 +1,8 @@
-import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-
+// Casey Hsu - 101376814
 public class Game extends JFrame implements ActionListener{
 
     Board board;
@@ -12,13 +10,11 @@ public class Game extends JFrame implements ActionListener{
     Player player2;
     Player currentPlayer;
     boolean gameOver;
-    Scanner scanner;
     private JButton[][] buttons;
     private static final String FRAME_TITLE = "Matt Sucks At TicTacToe";
 
     public Game() {
         board = new Board();
-        scanner = new Scanner(System.in);
         gameOver = false;
         buttons = new JButton[Board.AREA][Board.AREA];
         initializePlayers();

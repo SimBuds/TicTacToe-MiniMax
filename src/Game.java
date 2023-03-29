@@ -1,4 +1,9 @@
+// TicTacToe Group Project
 // Casey Hsu - 101376814
+// Matthew Price - 100723485
+// Lukas Canji - 101 329 428
+// Feriel Maamer 101091286
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
